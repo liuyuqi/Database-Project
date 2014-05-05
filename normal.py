@@ -70,12 +70,66 @@ def normalize_checkins():
 	filein.close()
 	fileout.close()
 	
+def normalize_division_name():
+	'''Normalize the devision name table'''
+	filein = open("projData/checkins.txt", "r")
+	fileout = open("normalData/div_name.txt", "w")	
+	for line in filein:
+		count = 1
+		for word in line.split():
+			if count == 12:
+				l1_ad_div = word
+			elif count == 13:
+				l1_div_code = word
+			elif count == 14:
+				l2_ad_div = word
+			elif count == 15:
+				l2_div_code = word
+			elif count == 16:
+				country_code = word
+			count = count + 1
+		newline = '%s\t%s\t%s\t%s\t%s\t\n' % (l1_ad_div, l2_ad_div, l1_div_code, l2_div_code, country_code)
+		fileout.write(newline)
+	filein.close()
+	fileout.close()
+	
+def normalize_nearest_refer():
+	'''Normalize the nearest refer table'''
+	filein = open("projData/checkins.txt", "r")
+	fileout = open("normalData/nearest_refer.txt", "w")	
+	for line in filein:
+		count = 1
+		for word in line.split():
+			if count == 11:
+				placename = word
+			elif count == 10:
+				postal_code = word
+			elif count == 7:
+				la_of_nearest = word
+			elif count == 8:
+				lo_of_nearest = word
+			elif count == 13:
+				l1_div_code = word
+			elif count == 15:
+				l2_div_code = word
+			elif count == 16:
+				country_code = word
+			count = count + 1
+		newline = '%s\t%s\t%s\t%s\t%s\t%s\t%s\t\n' \
+					% (placename, postal_code, la_of_nearest, lo_of_nearest, l1_div_code, \
+					    l2_div_code, country_code)
+		fileout.write(newline)
+	filein.close()
+	fileout.close()
+		
 def main():
 	clean_old_data()
 	copy_users()
 	normalize_friend()
 	normalize_follow()
 	normalize_checkins()
+	normalize_division_name()
+	normalize_nearest_refer()
 	return 0
 
 if __name__ == '__main__':
