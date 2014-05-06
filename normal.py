@@ -122,6 +122,51 @@ def normalize_nearest_refer():
 	filein.close()
 	fileout.close()
 		
+def normalize_locations():
+	'''Normalizes the location table'''
+	filein = open("projData/locations.txt", "r")
+	fileout = open("normalData/location1.txt", "w")		
+	for line in filein:
+		count = 1
+		for word in line.split("\t"):
+			if count == 1:
+				locid = word
+			elif count == 2:
+				name = word
+			elif count == 3:
+				adddate = word
+			count = count + 1
+		newline = '%s\t%s\t%s' % (locid, name, adddate)
+		fileout.write(newline)
+	filein.close()
+	fileout.close()	
+	
+def get_all_locations():
+	'''Does the second phase of location normalization'''
+	filein = open("projData/checkins.txt", "r")
+	fileout = open("normalData/location2.txt", "w")
+	for line in filein:
+		count = 1
+		for word in line.split("\t"):
+			if count == 6:
+				locid = word
+			elif count == 4:
+				chkinlat = word
+			elif count == 5:
+				chkinlong = word
+			elif count == 11:
+				placename = word
+			elif count == 10:
+				postcode = word
+			elif count == 9:
+				distance = word
+			count = count + 1
+		newline = '%s\t%s\t%s\t%s\t%s\t%s' % (locid, chkinlat, \
+				chkinlong, placename, postcode, distance)
+		fileout.write(newline)
+	filein.close()
+	fileout.close()	
+	
 def main():
 	clean_old_data()
 	copy_users()
@@ -130,6 +175,8 @@ def main():
 	normalize_checkins()
 	normalize_division_name()
 	normalize_nearest_refer()
+	normalize_locations()
+	get_all_locations()
 	return 0
 
 if __name__ == '__main__':
