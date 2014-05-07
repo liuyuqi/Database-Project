@@ -3,6 +3,7 @@
 
 import shutil
 import os
+import re
 
 def clean_old_data():
 	'''Removes the old files before executing'''
@@ -19,7 +20,7 @@ def normalize_friend():
 	fileout = open("normalData/friendList.txt", "w")
 	for line in filein:
 		count = 0
-		for word in line.split():
+		for word in re.split(r'\t+', line.strip()):
 			if count == 0:
 				idleft = word
 				count = 1
@@ -37,7 +38,7 @@ def normalize_follow():
 	fileout = open("normalData/followList.txt", "w")
 	for line in filein:
 		count = 0
-		for word in line.split():
+		for word in re.split(r'\t+', line.strip()):
 			if count == 0:
 				idleft = word
 				count = 1
@@ -55,7 +56,7 @@ def normalize_checkins():
 	fileout = open("normalData/checkins.txt", "w")
 	for line in filein:
 		count = 1
-		for word in line.split():
+		for word in re.split(r'\t+', line.strip()):
 			if count == 1:
 				userid = word
 			elif count == 2:
@@ -73,10 +74,10 @@ def normalize_checkins():
 def normalize_division_name():
 	'''Normalize the devision name table'''
 	filein = open("projData/checkins.txt", "r")
-	fileout = open("normalData/div_name.txt", "w")	
+	fileout = open("normalData/div_name.txt", "w")
 	for line in filein:
 		count = 1
-		for word in line.split():
+		for word in re.split(r'\t+', line.strip()):
 			if count == 12:
 				l1_ad_div = word
 			elif count == 13:
@@ -88,7 +89,7 @@ def normalize_division_name():
 			elif count == 16:
 				country_code = word
 			count = count + 1
-		newline = '%s\t%s\t%s\t%s\t%s\t\n' % (l1_ad_div, l2_ad_div, l1_div_code, l2_div_code, country_code)
+		newline = '%s\t%s\t%s\t%s\t%s\n' % (l1_ad_div, l2_ad_div, l1_div_code, l2_div_code, country_code)
 		fileout.write(newline)
 	filein.close()
 	fileout.close()
@@ -99,7 +100,7 @@ def normalize_nearest_refer():
 	fileout = open("normalData/nearest_refer.txt", "w")	
 	for line in filein:
 		count = 1
-		for word in line.split():
+		for word in re.split(r'\t+', line.strip()):
 			if count == 11:
 				placename = word
 			elif count == 10:
@@ -128,7 +129,7 @@ def normalize_locations():
 	fileout = open("normalData/location1.txt", "w")		
 	for line in filein:
 		count = 1
-		for word in line.split("\t"):
+		for word in re.split(r'\t+', line.strip()):
 			if count == 1:
 				locid = word
 			elif count == 2:
@@ -136,7 +137,7 @@ def normalize_locations():
 			elif count == 3:
 				adddate = word
 			count = count + 1
-		newline = '%s\t%s\t%s' % (locid, name, adddate)
+		newline = '%s\t%s\t%s\n' % (locid, name, adddate)
 		fileout.write(newline)
 	filein.close()
 	fileout.close()	
@@ -147,7 +148,7 @@ def get_all_locations():
 	fileout = open("normalData/location2.txt", "w")
 	for line in filein:
 		count = 1
-		for word in line.split("\t"):
+		for word in re.split(r'\t+', line.strip()):
 			if count == 6:
 				locid = word
 			elif count == 4:
@@ -161,7 +162,7 @@ def get_all_locations():
 			elif count == 9:
 				distance = word
 			count = count + 1
-		newline = '%s\t%s\t%s\t%s\t%s\t%s' % (locid, chkinlat, \
+		newline = '%s\t%s\t%s\t%s\t%s\t%s\n' % (locid, chkinlat, \
 				chkinlong, placename, postcode, distance)
 		fileout.write(newline)
 	filein.close()
