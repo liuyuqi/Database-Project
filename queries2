@@ -1,0 +1,97 @@
+mysql> create table users (
+    -> user_id int,
+    -> last_name varchar(30),
+    -> first_name varchar(30),
+    -> gender char,
+    -> join_date date)
+    -> engine = innodb;
+
+mysql> alter table users add primary key (user_id);
+
+mysql> create table friends (
+    -> ID1 int,
+    -> ID2 int,
+    -> primary key (ID1, ID2),
+    -> foreign key (ID1) references users (user_id)
+    ->   on delete cascade on update cascade,
+    -> foreign key (ID2) references users (user_id)
+    ->   on delete cascade on update cascade)
+    -> engine = innodb;
+
+mysql> create table follow (
+    -> ID int,
+    -> followed_ID int,
+    -> primary key (ID, followed_ID),
+    -> foreign key (ID) references users (user_id)
+    ->   on delete cascade on update cascade,
+    -> foreign key (followed_ID) references users (user_id)
+    ->   on delete cascade on update cascade)              
+    -> engine = innodb;
+
+mysql> create table nearest_refer (
+    -> place_name varchar(50),
+    -> postal_code varchar(50),
+    -> la_nearest double,
+    -> long_nearest double,
+    -> div_code_l1 varchar(50),
+    -> div_code_l2 varchar(50),
+    -> country_code varchar(50),
+    -> primary key (place_name, postal_code))
+    -> engine = innodb;
+
+mysql> alter table nearest_refer add index (div_code_l1);
+mysql> alter table nearest_refer add index (div_code_l2);
+mysql> alter table nearest_refer add index (country_code);
+mysql> create table div_name (
+    -> ad_div_l1 varchar(50),
+    -> ad_div_l2 varchar(50),
+    -> div_code_l1 varchar(50),
+    -> div_code_l2 varchar(50),
+    -> country_code varchar(50),
+    -> primary key (div_code_l1, div_code_l2, country_code),
+    -> foreign key (div_code_l1) references nearest_refer (div_code_l1)
+    ->   on delete cascade on update cascade,
+    -> foreign key (div_code_l2) references nearest_refer (div_code_l2)
+    ->   on delete cascade on update cascade,                          
+    -> foreign key (country_code) references nearest_refer (country_code)
+    ->   on delete cascade on update cascade                             
+    -> ) engine = innodb;
+
+mysql> alter table nearest_refer add index (place_name);
+mysql> alter table nearest_refer add index (postal_code);
+
+mysql> create table location2 (
+    -> location_ID int,
+    -> check_in_lat double,
+    -> check_in_long double,
+    -> place_name varchar(50),
+    -> postal_code varchar(50),
+    -> distance_between double,
+    -> primary key (location_ID),
+    -> foreign key (place_name) references nearest_refer (place_name)
+    -> on delete cascade on update cascade,
+    -> foreign key (postal_code) references nearest_refer (postal_code)
+    -> on delete cascade on update cascade)                            
+    -> engine = innodb;
+
+mysql> create table location1 (
+    -> location_ID int,
+    -> name varchar(50),
+    -> add_date date,
+    -> primary key (location_ID))
+    -> engine = innodb;
+
+mysql> alter table location2 add foreign key (location_ID) references location1 (location_ID)
+    -> on delete cascade on update cascade;
+
+mysql> create table checkins (
+    -> user_id int,
+    -> check_in_date date,
+    -> check_in_time time,
+    -> location_id int,
+    -> primary key (user_id, check_in_date, check_in_time),
+    -> foreign key (location_id) references location1 (location_ID)
+    -> on delete cascade on update cascade)
+    -> engine = innodb;
+
+

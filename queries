@@ -49,11 +49,11 @@ mysql> create table location1 (
 
 mysql> create table location2 (
     -> location_ID int,
-    -> check_in_lat float,
-    -> check_in_long float,
+    -> check_in_lat double,
+    -> check_in_long double,
     -> place_name varchar(30),
     -> postal_code varchar(20),
-    -> distance_between float)
+    -> distance_between double)
     -> engine = innodb;
 
 mysql> alter table friends add primary key (ID1, ID2);
