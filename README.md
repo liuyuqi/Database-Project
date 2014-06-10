@@ -1,3 +1,3 @@
-Database Project- UD CISC-637
+Database Project
 
 by Yuqi Liu & Chen Peng
